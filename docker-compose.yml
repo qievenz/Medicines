@@ -13,11 +13,11 @@ services:
   api:
     build:
       context: ./src
-      dockerfile: ReactTSWithNetCoreTemplate.API/Dockerfile
-    container_name: reacttswithnetcoretemplate_api
+      dockerfile: Medicines.API/Dockerfile
+    container_name: medicines_api
     environment:
       - ASPNETCORE_ENVIRONMENT=Release
-      - ConnectionStrings__DefaultConnection=Server=mssql_db,1433;Database=ReactTSWithNetCoreTemplateDB;User=sa;Password=ChangeThis!!1;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql_db,1433;Database=MedicinesDB;User=sa;Password=ChangeThis!!1;TrustServerCertificate=True;
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "5010:80"
@@ -26,9 +26,9 @@ services:
 
   client:
     build:
-      context: ./src/reacttswithnetcoretemplate.client
+      context: ./src/medicines.client
       dockerfile: Dockerfile
-    container_name: reacttswithnetcoretemplate_client
+    container_name: medicines_client
     ports:
       - "3000:80"
     depends_on:
@@ -37,4 +37,4 @@ services:
 volumes:
   mssql_data:
 
-#docker-compose -p reacttswithnetcoretemplate down ; docker-compose -p reacttswithnetcoretemplate up --build -d
+#docker-compose -p medicines down ; docker-compose -p medicines up --build -d

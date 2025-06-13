@@ -2,12 +2,12 @@
 
 namespace Medicines.Core.Repositories
 {
-    public interface MedicineRepository
+    public interface IMedicineRepository
     {
         Task<IEnumerable<Medicine>> GetAll();
-        Task<Medicine?> GetById(int id);
+        Task<Medicine?> GetById(Guid id);
         Task Add(Medicine data);
-        Task Delete(int id);
+        Task Delete(Guid id);
         Task Update(Medicine data);
     }
 }

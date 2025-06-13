@@ -2,12 +2,12 @@
 
 namespace Medicines.Core.Services
 {
-    public interface IDataService
+    public interface IMedicineService
     {
         Task<IEnumerable<Medicine>> GetAllDatasAsync();
-        Task<Medicine?> GetDataByIdAsync(int id);
+        Task<Medicine?> GetDataByIdAsync(Guid id);
         Task<Medicine> CreateDataAsync(Medicine data);
-        Task<bool> UpdateDataAsync(int id, Medicine data);
-        Task<bool> DeleteDataAsync(int id);
+        Task<bool> UpdateDataAsync(Guid id, Medicine data);
+        Task<bool> DeleteDataAsync(Guid id);
     }
 }

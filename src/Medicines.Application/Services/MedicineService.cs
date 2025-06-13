@@ -6,29 +6,23 @@ using Serilog;
 
 namespace Medicines.Application.Services
 {
-    public class DataService : IDataService
+    public class MedicineService : IMedicineService
     {
-        private readonly MedicineRepository _dataRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public DataService(MedicineRepository dataRepository)
+        public MedicineService(IMedicineRepository medicineRepository)
         {
-            _dataRepository = dataRepository;
+            _medicineRepository = medicineRepository;
         }
 
         public async Task<IEnumerable<Medicine>> GetAllDatasAsync()
         {
-            return await _dataRepository.GetAll();
+            return await _medicineRepository.GetAll();
         }
 
-        public async Task<Medicine?> GetDataByIdAsync(int id)
+        public async Task<Medicine?> GetDataByIdAsync(Guid id)
         {
-            if (id <= 0)
-            {
-                Log.Warning("Intentando obtener un registro Data con ID inválido: {Id}", id);
-                throw new InvalidInputException($"El ID de producto '{id}' debe ser un número positivo.", nameof(id));
-            }
-
-            var data = await _dataRepository.GetById(id);
+            var data = await _medicineRepository.GetById(id);
 
             if (data == null)
             {
@@ -47,20 +41,20 @@ namespace Medicines.Application.Services
                 throw new InvalidInputException("El objeto Data no puede ser nulo.");
             }
 
-            await _dataRepository.Add(data);
+            await _medicineRepository.Add(data);
 
             return data;
         }
 
-        public async Task<bool> UpdateDataAsync(int id, Medicine data)
+        public async Task<bool> UpdateDataAsync(Guid id, Medicine data)
         {
-            if (id <= 0 || data == null || id != data.Id)
+            if (data == null || id != data.Id)
             {
                 Log.Warning("Intentando actualizar Data con ID inválido '{Id}' o ID de objeto '{DataId}' no coincide.", id, data?.Id);
                 throw new InvalidInputException("ID inválido o ID de objeto no coincide para la actualización.");
             }
 
-            var existingData = await _dataRepository.GetById(id);
+            var existingData = await _medicineRepository.GetById(id);
 
             if (existingData == null)
             {
@@ -68,27 +62,21 @@ namespace Medicines.Application.Services
                 throw new ResourceNotFoundException($"Data record with ID '{id}' not found for update.");
             }
 
-            await _dataRepository.Update(existingData);
+            await _medicineRepository.Update(existingData);
 
             return true;
         }
 
-        public async Task<bool> DeleteDataAsync(int id)
+        public async Task<bool> DeleteDataAsync(Guid id)
         {
-            if (id <= 0)
-            {
-                Log.Warning("Intentando eliminar Data con ID inválido: {Id}", id);
-                throw new InvalidInputException($"El ID de eliminación '{id}' debe ser un número positivo.", nameof(id));
-            }
-
-            var existingData = await _dataRepository.GetById(id);
+            var existingData = await _medicineRepository.GetById(id);
             if (existingData == null)
             {
                 Log.Warning("Registro Data con ID '{Id}' no encontrado para eliminación.", id);
                 throw new ResourceNotFoundException($"Data record with ID '{id}' not found for deletion.");
             }
 
-            await _dataRepository.Delete(id);
+            await _medicineRepository.Delete(id);
 
             return true;
         }

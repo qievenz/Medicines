@@ -8,13 +8,13 @@ namespace Medicines.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class DataController : ControllerBase
+    public class MedicineController : ControllerBase
     {
-        private readonly IDataService _dataService;
+        private readonly IMedicineService _medicineService;
 
-        public DataController(IDataService dataService)
+        public MedicineController(IMedicineService medicineService)
         {
-            _dataService = dataService;
+            _medicineService = medicineService;
         }
 
         [HttpGet]
@@ -23,7 +23,7 @@ namespace Medicines.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             Log.Information("GET /api/Data - Request to get all data records.");
-            var datas = await _dataService.GetAllDatasAsync();
+            var datas = await _medicineService.GetAllDatasAsync();
 
             return Ok(datas);
         }
@@ -33,10 +33,10 @@ namespace Medicines.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             Log.Information("GET /api/Data/{Id} - Request to get data record by ID: {Id}.", id);
-            var data = await _dataService.GetDataByIdAsync(id);
+            var data = await _medicineService.GetDataByIdAsync(id);
 
             return Ok(data);
         }
@@ -55,7 +55,7 @@ namespace Medicines.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var createdData = await _dataService.CreateDataAsync(data);
+            var createdData = await _medicineService.CreateDataAsync(data);
             Log.Information("POST /api/Data - Data record with ID {Id} created successfully.", createdData.Id);
 
             return CreatedAtAction(nameof(GetById), new { id = createdData.Id }, createdData);
@@ -66,7 +66,7 @@ namespace Medicines.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> Update(int id, [FromBody] Medicine data)
+        public async Task<IActionResult> Update(Guid id, [FromBody] Medicine data)
         {
             Log.Information("PUT /api/Data/{Id} - Request to update data record with ID: {Id}.", id);
 
@@ -77,7 +77,7 @@ namespace Medicines.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _dataService.UpdateDataAsync(id, data);
+            await _medicineService.UpdateDataAsync(id, data);
             Log.Information("PUT /api/Data/{Id} - Data record with ID {Id} updated successfully.", id);
 
             return NoContent();
@@ -89,10 +89,10 @@ namespace Medicines.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             Log.Information("DELETE /api/Data/{Id} - Request to delete data record with ID: {Id}.", id);
-            await _dataService.DeleteDataAsync(id);
+            await _medicineService.DeleteDataAsync(id);
             Log.Information("DELETE /api/Data/{Id} - Data record with ID {Id} deleted successfully.", id);
 
             return NoContent();

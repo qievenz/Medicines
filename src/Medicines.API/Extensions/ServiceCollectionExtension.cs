@@ -77,7 +77,7 @@ namespace Medicines.API.Extensions
             services.AddAuthorization();
 
             services.AddScoped<MedicineRepository, MedicineRepository>();
-            services.AddScoped<IDataService, DataService>();
+            services.AddScoped<IMedicineService, MedicineService>();
 
             return services;
         }
