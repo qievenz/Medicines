@@ -18,7 +18,7 @@ namespace Medicines.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Data>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Medicine>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> GetAll()
         {
@@ -29,7 +29,7 @@ namespace Medicines.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Data))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Medicine))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
@@ -42,10 +42,10 @@ namespace Medicines.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Data))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Medicine))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> Create([FromBody] Data data)
+        public async Task<IActionResult> Create([FromBody] Medicine data)
         {
             Log.Information("POST /api/Data - Request to create a new data record.");
             if (!ModelState.IsValid)
@@ -66,7 +66,7 @@ namespace Medicines.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> Update(int id, [FromBody] Data data)
+        public async Task<IActionResult> Update(int id, [FromBody] Medicine data)
         {
             Log.Information("PUT /api/Data/{Id} - Request to update data record with ID: {Id}.", id);
 

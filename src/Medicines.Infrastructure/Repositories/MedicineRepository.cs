@@ -5,16 +5,16 @@ using Medicines.Infrastructure.Persistence;
 
 namespace Medicines.Infrastructure.Repositories
 {
-    public class DataRepository : IDataRepository
+    public class MedicineRepository : Core.Repositories.MedicineRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public DataRepository(ApplicationDbContext context)
+        public MedicineRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task Add(Data data)
+        public async Task Add(Medicine data)
         {
             _context.Datas.Add(data);
             await _context.SaveChangesAsync();
@@ -30,17 +30,17 @@ namespace Medicines.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Data>> GetAll()
+        public async Task<IEnumerable<Medicine>> GetAll()
         {
             return await _context.Datas.ToListAsync();
         }
 
-        public async Task<Data?> GetById(int id)
+        public async Task<Medicine?> GetById(int id)
         {
             return await _context.Datas.FindAsync(id);
         }
 
-        public async Task Update(Data data)
+        public async Task Update(Medicine data)
         {
             _context.Datas.Update(data);
             await _context.SaveChangesAsync();

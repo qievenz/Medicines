@@ -76,7 +76,7 @@ namespace Medicines.API.Extensions
             services.AddApiKeyAuthentication(configuration);
             services.AddAuthorization();
 
-            services.AddScoped<IDataRepository, DataRepository>();
+            services.AddScoped<MedicineRepository, MedicineRepository>();
             services.AddScoped<IDataService, DataService>();
 
             return services;

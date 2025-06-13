@@ -4,10 +4,10 @@ namespace Medicines.Core.Services
 {
     public interface IDataService
     {
-        Task<IEnumerable<Data>> GetAllDatasAsync();
-        Task<Data?> GetDataByIdAsync(int id);
-        Task<Data> CreateDataAsync(Data data);
-        Task<bool> UpdateDataAsync(int id, Data data);
+        Task<IEnumerable<Medicine>> GetAllDatasAsync();
+        Task<Medicine?> GetDataByIdAsync(int id);
+        Task<Medicine> CreateDataAsync(Medicine data);
+        Task<bool> UpdateDataAsync(int id, Medicine data);
         Task<bool> DeleteDataAsync(int id);
     }
 }

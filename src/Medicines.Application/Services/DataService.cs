@@ -8,19 +8,19 @@ namespace Medicines.Application.Services
 {
     public class DataService : IDataService
     {
-        private readonly IDataRepository _dataRepository;
+        private readonly MedicineRepository _dataRepository;
 
-        public DataService(IDataRepository dataRepository)
+        public DataService(MedicineRepository dataRepository)
         {
             _dataRepository = dataRepository;
         }
 
-        public async Task<IEnumerable<Data>> GetAllDatasAsync()
+        public async Task<IEnumerable<Medicine>> GetAllDatasAsync()
         {
             return await _dataRepository.GetAll();
         }
 
-        public async Task<Data?> GetDataByIdAsync(int id)
+        public async Task<Medicine?> GetDataByIdAsync(int id)
         {
             if (id <= 0)
             {
@@ -39,7 +39,7 @@ namespace Medicines.Application.Services
             return data;
         }
 
-        public async Task<Data> CreateDataAsync(Data data)
+        public async Task<Medicine> CreateDataAsync(Medicine data)
         {
             if (data == null)
             {
@@ -52,7 +52,7 @@ namespace Medicines.Application.Services
             return data;
         }
 
-        public async Task<bool> UpdateDataAsync(int id, Data data)
+        public async Task<bool> UpdateDataAsync(int id, Medicine data)
         {
             if (id <= 0 || data == null || id != data.Id)
             {
