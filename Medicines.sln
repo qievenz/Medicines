@@ -33,8 +33,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 - Core", "05 - Core", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 - Tests", "00 - Tests", "{5A91E43F-8A7D-4018-B2C1-85E90248B60D}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "medicines.client", "src\medicines.client\medicines.client.esproj", "{E8673F3A-D007-4FD7-A80B-3B213E85556D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,11 +59,6 @@ Global
 		{494F268C-B96B-40C2-BCDB-D7F2B0FBA248}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{494F268C-B96B-40C2-BCDB-D7F2B0FBA248}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{494F268C-B96B-40C2-BCDB-D7F2B0FBA248}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8673F3A-D007-4FD7-A80B-3B213E85556D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8673F3A-D007-4FD7-A80B-3B213E85556D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8673F3A-D007-4FD7-A80B-3B213E85556D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8673F3A-D007-4FD7-A80B-3B213E85556D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8673F3A-D007-4FD7-A80B-3B213E85556D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,7 +69,6 @@ Global
 		{F6E810AB-8F2F-444E-9581-891BD8954D14} = {27D63226-399B-4BD9-83CA-451813AD877C}
 		{9F59D25E-3F15-4270-8B65-FAD7D2950E7B} = {F0FD3C88-A728-48A7-8702-FC7F2F0AA5B2}
 		{494F268C-B96B-40C2-BCDB-D7F2B0FBA248} = {9150C902-F570-4166-8D9F-F6E629CB0B75}
-		{E8673F3A-D007-4FD7-A80B-3B213E85556D} = {F186EC5D-8DAB-403F-90BB-28FBC38E5475}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4F5F80C1-D771-4529-93AB-DB2F56651F5A}

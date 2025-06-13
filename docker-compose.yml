@@ -24,16 +24,6 @@ services:
     depends_on:
       - mssql
 
-  client:
-    build:
-      context: ./src/medicines.client
-      dockerfile: Dockerfile
-    container_name: medicines_client
-    ports:
-      - "3000:80"
-    depends_on:
-      - api
-
 volumes:
   mssql_data:
 
