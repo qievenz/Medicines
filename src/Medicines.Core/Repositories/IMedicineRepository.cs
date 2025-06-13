@@ -9,5 +9,7 @@ namespace Medicines.Core.Repositories
         Task Add(Medicine data);
         Task Delete(Guid id);
         Task Update(Medicine data);
+        Task<IEnumerable<Medicine>> GetPagedMedicinesAsync(string name, string laboratory, int pageNumber, int pageSize);
+        Task<int> CountMedicinesAsync(string name, string laboratory);
     }
 }

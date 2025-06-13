@@ -22,10 +22,11 @@ namespace Medicines.Infrastructure.Repositories
 
         public async Task Delete(Guid id)
         {
-            var Medicines = await _context.Medicines.FindAsync(id);
-            if (Medicines != null)
+            var medicine = await _context.Medicines.FindAsync(id);
+            if (medicine != null)
             {
-                _context.Medicines.Remove(Medicines);
+                medicine.IsDeleted = true;
+                _context.Medicines.Update(medicine);
                 await _context.SaveChangesAsync();
             }
         }
@@ -40,10 +41,47 @@ namespace Medicines.Infrastructure.Repositories
             return await _context.Medicines.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Medicine>> GetPagedMedicinesAsync(string name, string laboratory, int pageNumber, int pageSize)
+        {
+            var query = _context.Medicines.AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(m => m.Name.Contains(name));
+            }
+
+            if (!string.IsNullOrEmpty(laboratory))
+            {
+                query = query.Where(m => m.Laboratory.Contains(laboratory));
+            }
+
+            return await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
         public async Task Update(Medicine data)
         {
             _context.Medicines.Update(data);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> CountMedicinesAsync(string name, string laboratory)
+        {
+            var query = _context.Medicines.AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(m => m.Name.Contains(name));
+            }
+
+            if (!string.IsNullOrEmpty(laboratory))
+            {
+                query = query.Where(m => m.Laboratory.Contains(laboratory));
+            }
+
+            return await query.CountAsync();
         }
     }
 }
