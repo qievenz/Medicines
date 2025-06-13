@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Medicines.Core.Entities;
+﻿using Medicines.Core.Entities;
 using Medicines.Core.Repositories;
 using Medicines.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medicines.Infrastructure.Repositories
 {
@@ -82,6 +82,11 @@ namespace Medicines.Infrastructure.Repositories
             }
 
             return await query.CountAsync();
+        }
+
+        public async Task<Medicine> GetByCode(string code)
+        {
+            return await _context.Medicines.FirstOrDefaultAsync(m => m.Code == code);
         }
     }
 }

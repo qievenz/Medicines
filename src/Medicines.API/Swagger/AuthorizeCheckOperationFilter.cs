@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Medicines.API.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using Medicines.API.Authentication;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Medicines.API.Swagger

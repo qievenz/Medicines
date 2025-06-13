@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Medicines.API.Authentication;
+﻿using Medicines.API.Authentication;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Medicines.API.Extensions
 {

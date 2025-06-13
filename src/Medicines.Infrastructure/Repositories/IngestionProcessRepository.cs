@@ -1,12 +1,6 @@
 ﻿using Medicines.Core.Entities;
 using Medicines.Core.Repositories;
 using Medicines.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Medicines.Infrastructure.Repositories
 {

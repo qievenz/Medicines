@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Medicines.API.Authentication;
+﻿using Medicines.API.Authentication;
 using Medicines.API.Middlewares;
 using Medicines.API.Swagger;
 using Medicines.Application.Services;
@@ -8,6 +7,7 @@ using Medicines.Core.Services;
 using Medicines.Core.Settings;
 using Medicines.Infrastructure.Persistence;
 using Medicines.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Medicines.API.Extensions

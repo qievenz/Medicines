@@ -1,14 +1,13 @@
-﻿namespace Medicines.Core.DTOs
+﻿namespace Medicines.Application.DTOs.Ingestion
 {
-    public class MedicineDto
+    public class MedicineJsonDto
     {
-        public Guid Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Laboratory { get; set; }
         public string ActiveIngredient { get; set; }
         public string Concentration { get; set; }
         public string Presentation { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public string ExpirationDate { get; set; }
     }
 }

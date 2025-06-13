@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Medicines.Core.Entities;
+﻿using Medicines.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medicines.Infrastructure.Persistence
 {

@@ -11,5 +11,6 @@ namespace Medicines.Core.Repositories
         Task Update(Medicine data);
         Task<IEnumerable<Medicine>> GetPagedMedicinesAsync(string name, string laboratory, int pageNumber, int pageSize);
         Task<int> CountMedicinesAsync(string name, string laboratory);
+        Task<Medicine> GetByCode(string code);
     }
 }
