@@ -1,0 +1,95 @@
+{
+"provider": "DataProvider1",
+"timestamp": "2025-01-15T10:30:00Z",
+"medicines": [
+{
+"code": "MED101",
+"name": "Paracetamol Pediátrico",
+"laboratory": "KidsPharm",
+"activeIngredient": "Paracetamol",
+"concentration": "120mg/5ml",
+"presentation": "Jarabe 60ml",
+"expirationDate": "2025-10-31"
+},
+{
+"code": "MED107",
+"name": "Prednisona 5mg",
+"laboratory": "CorticoLab",
+"concentration": "5mg",
+"presentation": "Tabletas x 20",
+"expirationDate": "2025-11-30"
+},
+{
+"code": "MED102",
+"name": "Insulina Glargina",
+"laboratory": "DiabetCare",
+"activeIngredient": "Insulina Glargina",
+"concentration": "100UI/ml",
+"presentation": "Pluma 3ml x 5",
+"expirationDate": "2025-06-30"
+},
+{
+"code": "MED103",
+"name": "Vitamina D3",
+"laboratory": "VitaLab",
+"activeIngredient": "Colecalciferol",
+"concentration": "1000UI",
+"presentation": "Cápsulas x 30",
+"expirationDate": "2026-12-31"
+},
+{
+"code": "MED002",
+"name": "Ibuprofeno 400mg",
+"laboratory": "PharmaCo Internacional",
+"activeIngredient": "Ibuprofeno",
+"concentration": "400mg",
+"presentation": "Tabletas x 50",
+"expirationDate": "2026-03-20"
+},
+{
+"code": "MED104",
+"name": "Complejo B",
+"laboratory": "NutriPharm",
+"activeIngredient": "Vitaminas B1, B6, B12",
+"concentration": "Multiple",
+"presentation": "Tabletas x 30",
+"expirationDate": "2025-09-30"
+},
+{
+"code": "MED105",
+"name": "Cetirizina 10mg",
+"laboratory": "AllergyFree",
+"activeIngredient": "Cetirizina",
+"concentration": "10mg",
+"presentation": "Tabletas x 20",
+"expirationDate": "2023-12-31"
+},
+{
+"code": "",
+"name": "Medicamento Sin Código",
+"laboratory": "TestLab",
+"activeIngredient": "Unknown",
+"concentration": "50mg",
+"presentation": "Tabletas x 10",
+"expirationDate": "2025-08-15"
+},
+{
+"code": "MED108",
+"name": "Ranitidina 150mg",
+"laboratory": "GastroPharm",
+"activeIngredient": "Ranitidina",
+"concentration": "150 miligramos",
+"presentation": "Tabletas x 20",
+"expirationDate": "2025-07-31"
+},
+{
+"code": "MED109",
+"name": "Fluoxetina 20mg",
+"laboratory": "MentalHealth",
+"activeIngredient": "Fluoxetina",
+"concentration": "20mg",
+"presentation": "Cápsulas x 28",
+"expirationDate": "2026-01-15"
+}
+]
+}

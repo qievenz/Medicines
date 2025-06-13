@@ -1,0 +1,14 @@
+medicine_code,medicine_name,laboratory,active_ingredient,concentration,presentation,expiration_date
+MED001,Paracetamol 500mg,LabCorp,Paracetamol,500mg,Tabletas x20,2025-12-31
+MED002,Ibuprofeno 400mg,PharmaCo,Ibuprofeno,400mg,Tabletas x30,2026-03-15
+MED003,Amoxicilina 500mg,BioLab,Amoxicilina,500mg,Cápsulas x21,2025-08-20
+MED004,Omeprazol 20mg,MediPharm,Omeprazol,20mg,Cápsulas x14,2026-01-10
+MED005,Losartán 50mg,CardioLab,Losartán,50mg,Tabletas x30,2025-11-30
+MED001,Paracetamol 500mg,LabCorp,Paracetamol,500mg,Tabletas x30,2025-12-31
+MED006,Metformina 850mg,DiabetCare,Metformina,850mg,Tabletas x60,2026-05-20
+MED007,Atorvastatina 40mg,CardioLab,Atorvastatina,40mg,Tabletas x30,2025-09-15
+MED008,Salbutamol,RespiraCare,Salbutamol,100mcg,Inhalador 200dosis,2024-12-31
+MED009,Diclofenaco 50mg,PainRelief,Diclofenaco,INVALID,Tabletas x20,2026-02-28
+MED010,Loratadina 10mg,AllergyFree,Loratadina,10mg,Tabletas x10,2025-07-15
+Sin Nombre,LabCorp,Desconocido,100mg,Tabletas x 10,2025-12-31
+MED012,Aspirina 100mg,BayerLab,,100mg,Tabletas x 30,2026-04-20

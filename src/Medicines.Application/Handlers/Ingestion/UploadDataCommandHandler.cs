@@ -187,32 +187,49 @@ namespace Medicines.Application.Handlers.Ingestion
             List<string> errors = new List<string>();
             Guid medicineId = Guid.NewGuid();
 
-            string code = data.Code ?? data.medicine_code?.ToString();
-            string name = data.Name ?? data.medicine_name?.ToString();
-            string laboratory = data.Laboratory ?? data.laboratory?.ToString();
-            string activeIngredient = data.ActiveIngredient ?? data.active_ingredient?.ToString();
-            string concentration = data.Concentration ?? data.concentration?.ToString();
-            string presentation = data.Presentation ?? data.presentation?.ToString();
-            string expirationDateStr = data.ExpirationDate ?? data.expiration_date?.ToString();
+            var code = "";
+            var name = "";
+            var laboratory = "";
+            var activeIngredient = "";
+            var concentration = "";
+            var presentation = "";
+            var expirationDateStr = "";
+            var expirationDate = DateTime.MinValue;
 
-            if (string.IsNullOrWhiteSpace(code)) errors.Add("Code is required.");
-            if (string.IsNullOrWhiteSpace(name)) errors.Add("Name is required.");
-            if (string.IsNullOrWhiteSpace(laboratory)) errors.Add("Laboratory is required.");
-            if (string.IsNullOrWhiteSpace(activeIngredient)) errors.Add("ActiveIngredient is required.");
-
-            DateTime expirationDate;
-            if (!DateTime.TryParse(expirationDateStr, out expirationDate))
+            try
             {
-                errors.Add("Invalid ExpirationDate format.");
+
+                code = data.Code ?? data.medicine_code?.ToString();
+                name = data.Name ?? data.medicine_name?.ToString();
+                laboratory = data.Laboratory ?? data.laboratory?.ToString();
+                activeIngredient = data.ActiveIngredient ?? data.active_ingredient?.ToString();
+                concentration = data.Concentration ?? data.concentration?.ToString();
+                presentation = data.Presentation ?? data.presentation?.ToString();
+                expirationDateStr = data.ExpirationDate ?? data.expiration_date?.ToString();
+
+                if (string.IsNullOrWhiteSpace(code)) errors.Add("Code is required.");
+                if (string.IsNullOrWhiteSpace(name)) errors.Add("Name is required.");
+                if (string.IsNullOrWhiteSpace(laboratory)) errors.Add("Laboratory is required.");
+                if (string.IsNullOrWhiteSpace(activeIngredient)) errors.Add("ActiveIngredient is required.");
+
+                if (!DateTime.TryParse(expirationDateStr, out expirationDate))
+                {
+                    errors.Add("Invalid ExpirationDate format.");
+                }
+                else if (expirationDate < DateTime.Today)
+                {
+                    errors.Add("ExpirationDate must be in the future.");
+                }
+
+                if (!string.IsNullOrWhiteSpace(concentration) && !System.Text.RegularExpressions.Regex.IsMatch(concentration, @"^\d+(\.\d+)?(mg|ml|UI|mcg|milligramos|ml/dl|unidad|g|kg|L|µg|ug)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                {
+                    errors.Add("Concentration format is invalid.");
+                }
             }
-            else if (expirationDate < DateTime.Today)
+            catch (Exception ex)
             {
-                errors.Add("ExpirationDate must be in the future.");
-            }
-
-            if (!string.IsNullOrWhiteSpace(concentration) && !System.Text.RegularExpressions.Regex.IsMatch(concentration, @"^\d+(\.\d+)?(mg|ml|UI|mcg|milligramos|ml/dl|unidad|g|kg|L|µg|ug)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
-            {
-                errors.Add("Concentration format is invalid.");
+                Log.Error($"Error during data Validation for medicineId: {medicineId} - code: {code} - sourceFileName: {sourceFileName}");
+                errors.Add(ex.Message);
             }
 
             if (errors.Any())

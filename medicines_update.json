@@ -1,0 +1,24 @@
+{
+"provider": "DataProvider2",
+"timestamp": "2025-01-16T14:45:00Z",
+"medicines": [
+{
+"code": "MED001",
+"name": "Paracetamol 500mg - Nueva Presentación",
+"laboratory": "LabCorp International",
+"activeIngredient": "Paracetamol",
+"concentration": "500mg",
+"presentation": "Tabletas x 40",
+"expirationDate": "2026-06-30"
+},
+{
+"code": "MED002",
+"name": "Ibuprofeno 400mg",
+"laboratory": "PharmaCo",
+"activeIngredient": "Ibuprofeno",
+"concentration": "400mg",
+"presentation": "Tabletas x 50 - Blister",
+"expirationDate": "2026-04-15"
+}
+]
+}

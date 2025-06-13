@@ -10,7 +10,7 @@ namespace Medicines.Core.Entities
         public DateTime? CompletedAt { get; set; }
         public string FileName { get; set; }
         public string FileType { get; set; }
-        public string ErrorDetails { get; set; }
+        public string? ErrorDetails { get; set; }
         public int TotalRecords { get; set; }
         public int ProcessedRecords { get; set; }
         public int ValidRecords { get; set; }
