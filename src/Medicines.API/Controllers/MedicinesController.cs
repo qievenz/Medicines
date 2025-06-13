@@ -21,8 +21,8 @@ namespace Medicines.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<PagedResult<MedicineDto>>> GetMedicines(
-            [FromQuery] string name,
-            [FromQuery] string laboratory,
+            [FromQuery] string name = "",
+            [FromQuery] string laboratory = "",
             [FromQuery] int page = 1,
             [FromQuery] int size = 10)
         {

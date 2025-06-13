@@ -19,6 +19,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Release
       - ConnectionStrings__DefaultConnection=Server=mssql_db,1433;Database=MedicinesDB;User=sa;Password=ChangeThis!!1;TrustServerCertificate=True;
       - ASPNETCORE_URLS=http://+:80
+      - ApiKeyAuthOptions__SecretToken=SecretTokenToTest123
     ports:
       - "5010:80"
     depends_on:
