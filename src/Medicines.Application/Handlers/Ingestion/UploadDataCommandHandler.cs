@@ -1,10 +1,12 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using Medicines.Application.Commands.Ingestion;
-using Medicines.Application.DTOs.Ingestion;
 using Medicines.Core.DTOs;
+using Medicines.Core.DTOs.Ingestion;
 using Medicines.Core.Entities;
 using Medicines.Core.Enums;
 using Medicines.Core.Repositories;
+using Medicines.Core.Services;
 using Serilog;
 using System.Globalization;
 using System.Text.Json;
@@ -16,15 +18,18 @@ namespace Medicines.Application.Handlers.Ingestion
         private readonly IIngestionProcessRepository _ingestionProcessRepository;
         private readonly IMedicineRepository _medicineRepository;
         private readonly IAuditRepository _auditRepository;
+        private readonly IMedicineValidationService _medicineValidationService;
 
         public UploadDataCommandHandler(
             IIngestionProcessRepository ingestionProcessRepository,
             IMedicineRepository medicineRepository,
-            IAuditRepository auditRepository)
+            IAuditRepository auditRepository,
+            IMedicineValidationService medicineValidationService)
         {
             _ingestionProcessRepository = ingestionProcessRepository;
             _medicineRepository = medicineRepository;
             _auditRepository = auditRepository;
+            _medicineValidationService = medicineValidationService;
         }
 
         public async Task<IngestionResultDto> Handle(UploadDataCommand request)
@@ -53,64 +58,69 @@ namespace Medicines.Application.Handlers.Ingestion
 
                 if (ingestionProcess.FileType == "CSV")
                 {
-                    using (var reader = new StreamReader(new MemoryStream(request.FileContent)))
-                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
                     {
-                        csvMedicines = csv.GetRecords<MedicineCsvDto>().ToList();
-                        ingestionProcess.TotalRecords = csvMedicines.Count;
+                        MissingFieldFound = null,
+                        HeaderValidated = null
+                    };
+                    using (var reader = new StreamReader(new MemoryStream(request.FileContent)))
+                    using (var csv = new CsvReader(reader, csvConfig))
+                    {
+                        var records = csv.GetRecords<MedicineCsvDto>().ToList();
+                        ingestionProcess.TotalRecords = records.Count;
+
+                        int recordIndex = 0;
+                        foreach (var csvMed in records)
+                        {
+                            recordIndex++;
+                            var (medicine, isValid, errors) = _medicineValidationService.ValidateAndMapMedicineFromCsv(csvMed, ingestionProcess.FileName, ingestionProcess.StartedAt);
+                            if (isValid)
+                            {
+                                medicinesToProcess.Add(medicine);
+                            }
+                            else
+                            {
+                                processingErrors.Add($"Record CSV {recordIndex}: {string.Join(", ", errors)}");
+                            }
+                        }
                     }
                 }
                 else if (ingestionProcess.FileType == "JSON")
                 {
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var jsonContent = JsonSerializer.Deserialize<JsonIngestionInput>(request.FileContent, options);
-                    jsonMedicines = jsonContent?.Medicines ?? new List<MedicineJsonDto>();
-                    ingestionProcess.TotalRecords = jsonMedicines.Count;
+                    var jsonDoc = JsonDocument.Parse(request.FileContent);
+                    var jsonContent = jsonDoc.RootElement;
+
+                    if (jsonContent.TryGetProperty("medicines", out JsonElement medicinesElement) && medicinesElement.ValueKind == JsonValueKind.Array)
+                    {
+                        ingestionProcess.TotalRecords = medicinesElement.EnumerateArray().Count();
+                        int recordIndex = 0;
+                        foreach (var jsonMedElement in medicinesElement.EnumerateArray())
+                        {
+                            recordIndex++;
+                            var (medicine, isValid, errors) = _medicineValidationService.ValidateAndMapMedicineFromJson(jsonMedElement, ingestionProcess.FileName, ingestionProcess.StartedAt);
+                            if (isValid)
+                            {
+                                medicinesToProcess.Add(medicine);
+                            }
+                            else
+                            {
+                                processingErrors.Add($"Record JSON {recordIndex}: {string.Join(", ", errors)}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("JSON file does not contain a 'medicines' array or is malformed.");
+                    }
                 }
                 else
                 {
                     throw new InvalidOperationException("Unsupported file type.");
                 }
+                ingestionProcess.ValidRecords = medicinesToProcess.Count;
+                ingestionProcess.InvalidRecords = processingErrors.Count;
+                ingestionProcess.ProcessedRecords = ingestionProcess.ValidRecords + ingestionProcess.InvalidRecords;
 
-                int processedCount = 0;
-                int validCount = 0;
-                int invalidCount = 0;
-
-                foreach (var csvMed in csvMedicines)
-                {
-                    processedCount++;
-                    var (medicine, isValid, errors) = ValidateAndMapMedicine(csvMed, ingestionProcess.FileName, ingestionProcess.StartedAt);
-                    if (isValid)
-                    {
-                        medicinesToProcess.Add(medicine);
-                        validCount++;
-                    }
-                    else
-                    {
-                        invalidCount++;
-                        processingErrors.Add($"Record {processedCount} (CSV): {string.Join(", ", errors)}");
-                    }
-                }
-
-                foreach (var jsonMed in jsonMedicines)
-                {
-                    processedCount++;
-                    var (medicine, isValid, errors) = ValidateAndMapMedicine(jsonMed, ingestionProcess.FileName, ingestionProcess.StartedAt);
-                    if (isValid)
-                    {
-                        medicinesToProcess.Add(medicine);
-                        validCount++;
-                    }
-                    else
-                    {
-                        invalidCount++;
-                        processingErrors.Add($"Record {processedCount} (JSON): {string.Join(", ", errors)}");
-                    }
-                }
-
-                ingestionProcess.ProcessedRecords = processedCount;
-                ingestionProcess.ValidRecords = validCount;
-                ingestionProcess.InvalidRecords = invalidCount;
 
                 foreach (var newMedicine in medicinesToProcess)
                 {
@@ -161,7 +171,8 @@ namespace Medicines.Application.Handlers.Ingestion
                 {
                     IngestionId = ingestionId,
                     Status = IngestionStatus.Completed,
-                    Message = "Data ingestion initiated and processed successfully."
+                    Message = "Data ingestion processed.",
+                    ErrorDetails = ingestionProcess.ErrorDetails
                 };
             }
             catch (Exception ex)
@@ -180,78 +191,6 @@ namespace Medicines.Application.Handlers.Ingestion
                     ErrorDetails = ex.Message
                 };
             }
-        }
-
-        private (Medicine, bool, List<string>) ValidateAndMapMedicine(dynamic data, string sourceFileName, DateTime sourceFileTimestamp)
-        {
-            List<string> errors = new List<string>();
-            Guid medicineId = Guid.NewGuid();
-
-            var code = "";
-            var name = "";
-            var laboratory = "";
-            var activeIngredient = "";
-            var concentration = "";
-            var presentation = "";
-            var expirationDateStr = "";
-            var expirationDate = DateTime.MinValue;
-
-            try
-            {
-
-                code = data.Code ?? data.medicine_code?.ToString();
-                name = data.Name ?? data.medicine_name?.ToString();
-                laboratory = data.Laboratory ?? data.laboratory?.ToString();
-                activeIngredient = data.ActiveIngredient ?? data.active_ingredient?.ToString();
-                concentration = data.Concentration ?? data.concentration?.ToString();
-                presentation = data.Presentation ?? data.presentation?.ToString();
-                expirationDateStr = data.ExpirationDate ?? data.expiration_date?.ToString();
-
-                if (string.IsNullOrWhiteSpace(code)) errors.Add("Code is required.");
-                if (string.IsNullOrWhiteSpace(name)) errors.Add("Name is required.");
-                if (string.IsNullOrWhiteSpace(laboratory)) errors.Add("Laboratory is required.");
-                if (string.IsNullOrWhiteSpace(activeIngredient)) errors.Add("ActiveIngredient is required.");
-
-                if (!DateTime.TryParse(expirationDateStr, out expirationDate))
-                {
-                    errors.Add("Invalid ExpirationDate format.");
-                }
-                else if (expirationDate < DateTime.Today)
-                {
-                    errors.Add("ExpirationDate must be in the future.");
-                }
-
-                if (!string.IsNullOrWhiteSpace(concentration) && !System.Text.RegularExpressions.Regex.IsMatch(concentration, @"^\d+(\.\d+)?(mg|ml|UI|mcg|milligramos|ml/dl|unidad|g|kg|L|µg|ug)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
-                {
-                    errors.Add("Concentration format is invalid.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error during data Validation for medicineId: {medicineId} - code: {code} - sourceFileName: {sourceFileName}");
-                errors.Add(ex.Message);
-            }
-
-            if (errors.Any())
-            {
-                return (null, false, errors);
-            }
-
-            return (new Medicine
-            {
-                Id = medicineId,
-                Code = code,
-                Name = name,
-                Laboratory = laboratory,
-                ActiveIngredient = activeIngredient,
-                Concentration = concentration,
-                Presentation = presentation,
-                ExpirationDate = expirationDate,
-                CreatedAt = DateTime.UtcNow,
-                LastModifiedAt = DateTime.UtcNow,
-                SourceFileName = sourceFileName,
-                SourceFileTimestamp = sourceFileTimestamp
-            }, true, new List<string>());
         }
 
         private AuditEntry CreateAuditEntry(Guid medicineId, string fieldName, string oldValue, string newValue, string sourceFile, DateTime sourceFileTimestamp)

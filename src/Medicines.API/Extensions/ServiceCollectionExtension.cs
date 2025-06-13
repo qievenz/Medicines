@@ -1,10 +1,15 @@
-﻿using Medicines.API.Authentication;
+﻿using FluentValidation;
+using Medicines.API.Authentication;
 using Medicines.API.Middlewares;
 using Medicines.API.Swagger;
 using Medicines.Application.Handlers.Audit;
 using Medicines.Application.Handlers.Ingestion;
 using Medicines.Application.Handlers.Medicines;
+using Medicines.Application.Services;
+using Medicines.Application.Validators;
+using Medicines.Core.DTOs.Ingestion;
 using Medicines.Core.Repositories;
+using Medicines.Core.Services;
 using Medicines.Core.Settings;
 using Medicines.Infrastructure.Persistence;
 using Medicines.Infrastructure.Repositories;
@@ -80,6 +85,10 @@ namespace Medicines.API.Extensions
             services.AddScoped<IMedicineRepository, MedicineRepository>();
             services.AddScoped<IIngestionProcessRepository, IngestionProcessRepository>();
             services.AddScoped<IAuditRepository, AuditRepository>();
+
+            services.AddScoped<IValidator<MedicineCsvDto>, MedicineCsvDtoValidator>();
+            services.AddScoped<IValidator<MedicineJsonDto>, MedicineJsonDtoValidator>();
+            services.AddScoped<IMedicineValidationService, MedicineValidationService>();
 
             services.AddScoped<UploadDataCommandHandler>();
             services.AddScoped<GetIngestionStatusQueryHandler>();

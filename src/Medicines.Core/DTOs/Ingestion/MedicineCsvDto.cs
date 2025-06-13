@@ -1,4 +1,4 @@
-﻿namespace Medicines.Application.DTOs.Ingestion
+﻿namespace Medicines.Core.DTOs.Ingestion
 {
     public class MedicineCsvDto
     {
