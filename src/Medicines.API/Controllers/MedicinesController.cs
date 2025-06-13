@@ -1,7 +1,7 @@
 ﻿using Medicines.Application.Handlers.Medicines;
 using Medicines.Application.Queries.Medicines;
-using Medicines.Core.DTOs.Common;
 using Medicines.Core.DTOs;
+using Medicines.Core.DTOs.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
