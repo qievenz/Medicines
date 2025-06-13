@@ -1,0 +1,18 @@
+# Establece los saltos de línea predeterminados para todos los archivos de texto a LF en el repositorio.
+* text=auto eol=lf
+
+# Opcional: Puedes forzar tipos de archivos binarios para que Git no los trate como texto.
+# (Aunque 'text=auto' suele ser inteligente, esto es explícito)
+*.dll binary
+*.exe binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.rar binary
+*.gz binary
+*.tgz binary
+*.vsix binary
+*.nupkg binary
