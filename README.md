@@ -52,7 +52,7 @@ Una vez que los contenedores estén en marcha, la API estará disponible en:
 
 La API utiliza autenticación **Bearer Authentication** para todos los endpoints protegidos.
 
-* **Token**: `SecretTokenToTest123` (Configurado para desarrollo en `appsettings.Development.json`)
+* **Token**: `SecretTokenToTest123` (Configurado para desarrollo en la variable de entorno `ApiKeyAuthOptions__SecretToken` )
 
 Para usar la API (ej. en Postman o cURL), deberás incluir el encabezado `Authorization`:
 
