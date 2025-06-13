@@ -1,6 +1,9 @@
 ﻿using Medicines.API.Authentication;
 using Medicines.API.Middlewares;
 using Medicines.API.Swagger;
+using Medicines.Application.Handlers.Audit;
+using Medicines.Application.Handlers.Ingestion;
+using Medicines.Application.Handlers.Medicines;
 using Medicines.Application.Services;
 using Medicines.Core.Repositories;
 using Medicines.Core.Services;
@@ -77,7 +80,13 @@ namespace Medicines.API.Extensions
             services.AddAuthorization();
 
             services.AddScoped<IMedicineRepository, MedicineRepository>();
-            services.AddScoped<IMedicineService, MedicineService>();
+            services.AddScoped<IIngestionProcessRepository, IngestionProcessRepository>();
+            services.AddScoped<IAuditRepository, AuditRepository>();
+
+            services.AddScoped<UploadDataCommandHandler>();
+            services.AddScoped<GetIngestionStatusQueryHandler>();
+            services.AddScoped<GetPagedMedicinesQueryHandler>();
+            services.AddScoped<GetMedicineHistoryQueryHandler>();
 
             return services;
         }
